@@ -1,6 +1,7 @@
 import pygame, sys
 from pygame.locals import *
 import random
+import time
 class UFO:
     pygame.init()
     fuel = 200
@@ -84,6 +85,13 @@ class UFO:
         return state, end, rewar, self.fuel, success
         
     def __init__(self,position,speed,acceleration):
+        print("+==================================================+")
+        print("| Thư viện học tăng cường UFO được thực hiện bởi   |")
+        print("| Nguyễn Thanh Toàn. Bạn có thể xem chi tiết tại   |")
+        print("| Github.com/nttoan-khiem/Q_learning.              |")
+        print("| Thanks pygame have support this libary.          |")
+        print("+==================================================+")
+        time.sleep(2)
         self.position = position
         self.speed = speed
         self.acceleration = acceleration
@@ -138,11 +146,21 @@ class UFO:
         return result
         
     def randomState(self):
-        self.position[0] = random.randint(0,301)
-        self.position[1] = random.randint(0,401)
-        self.speed[0] = random.randint(-10,11)
-        self.speed[1] = random.randint(-10,10)
+        self.fuel = 200
+        self.position[0] = random.randint(0,250)
+        self.position[1] = random.randint(0,300)
+        self.speed[0] = random.randint(-1,2)
+        self.speed[1] = random.randint(-1,2)
+        result = [self.position[0],self.position[1],self.speed[0],self.speed[1]]
+        return result
     
+    def setState(self, state):
+        self.fuel = 200
+        self.position[0] = state[0]
+        self.position[1] = state[1]
+        self.speed[0] = state[2]
+        self.speed[1] = state[3]
+        
     def show_xAxis(self):
         return -14,410
     def show_yAxis(self):

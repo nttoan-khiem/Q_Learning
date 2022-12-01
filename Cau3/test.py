@@ -11,7 +11,7 @@ c_anpha = 0.1
 c_gramma = 0.9
 #init mylibary
 #init anlysis agent
-showCycle = 100
+showCycle = 1000
 listReward = []
 lanHocShow = {'lanHoc': [], 'trungBinh': [], 'max': [], 'min': []}
 #Init variable enviroment
@@ -31,12 +31,14 @@ def anhXa(input):           #ánh xạ state póition and speed into integer
     return result
 #end mtlibary
 #init Q_learning table
-qTable = numpy.random.uniform(low=0, high=0.5, size=([11,11,11,21]+[5])) #400 trang thai theo truc x, 514 trang thai vi tri truc y,
-#qTable = numpy.load('testt.npy')
+#qTable = numpy.random.uniform(low=0, high=0.5, size=([11,11,11,21]+[5])) #400 trang thai theo truc x, 514 trang thai vi tri truc y,
+qTable = numpy.load('testt.npy')
 #29 trang thai toc do theo truc x, 35 trang thai toc do theo truc y, 5 hanh dong cho moi trang thai
 #end init Q_learning table
 for lanHoc in range(5000000):
-    realCurrentState = e.reset()
+    #realCurrentState = e.reset()           #reset current state, used for basic training
+    realCurrentState = e.randomState()      #use for random testting
+    tempState = realCurrentState            #use for random testting
     currentStateAnhXa = anhXa(realCurrentState)
     end = 0
     render = 0
@@ -65,10 +67,15 @@ for lanHoc in range(5000000):
         #print("state: ",currentStateAnhXa)
         #print("action: ",action)
         #print("end: ",end)
-        #sprint("rewar: ",rewar)
+        #print("rewar: ",rewar)
         #print("success: ",success)
         #print("-------------------------------------------")
     e.close()
+    if success:
+        totol = 10
+        print('suscess in lanhoc: ',lanHoc)
+    else:
+        totol = 0
     listReward.append(totol)
     #print("Lan hoc: ",lanHoc)
     if not lanHoc % showCycle:
@@ -80,7 +87,7 @@ for lanHoc in range(5000000):
         lanHocShow["max"].append(rewardMax)
         lanHocShow["min"].append(rewardMiN)
         listReward = []
-        print("lanhoc", lanHoc)
+        #print("lanhoc", lanHoc)
     if not lanHoc % (showCycle*10):
         libPlot.plot(lanHocShow["lanHoc"],lanHocShow["trungBinh"],label="trungBinh")
         libPlot.plot(lanHocShow["lanHoc"],lanHocShow["max"],label="max reward")
@@ -88,13 +95,13 @@ for lanHoc in range(5000000):
         libPlot.legend(loc=4)  
         libPlot.savefig('plot.png')
         libPlot.close()
-    if success and lanHoc >= 55000:
+    if success and lanHoc >= 1000:
         state = [0,0,0,0]
-        print("success o lan thu: ",lanHoc)
-        e.reset()
+        #print("success o lan thu: ",lanHoc)
+        e.setState(tempState)
         for action in listAction:
             state, end, rewar, fuel, success = e.doAction(action)
             e.render(action)
-            #print("state: ",state)
-    if lanHoc % 200000 == 0:
+            print("state: ",state)
+    if lanHoc % 10000 == 0 and lanHoc > 0:
         numpy.save('testt.npy',qTable)
