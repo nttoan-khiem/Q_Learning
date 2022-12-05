@@ -31,6 +31,10 @@ print(actions)
 model = build_model(states, actions)
 model.summary()
 dqn = build_agent(model, actions)
+#test
+#dqn.load_weights('dqn_weights.h5f')
+#_=dqn.test(env, nb_episodes=10, visualize=1)
+#end test
 dqn.compile(Adam(lr=1e-3), metrics=['mae'])
 dqn.fit(env, nb_steps=50000, visualize=False, verbose=1)
 dqn.save_weights('dqn_weights.h5f', overwrite=True)

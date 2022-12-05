@@ -18,6 +18,7 @@ c_anpha = 0.4
 c_gramma = 0.9
 #Init Q table
 Q_table = numpy.random.uniform(low=0.4,high=0.6,size=([20,20]+[3]))        #matrix 20x20x3 
+#Q_table = numpy.load('qTable.csv.npy')
 listMax = []
 maxS = -201
 #my lib---------
@@ -30,7 +31,7 @@ def anhXa(realState):
     return rel
 #end lib--------
 #Q_learning------------------
-for lanHoc in range(10000):
+for lanHoc in range(50000):
     listAction = []
     realCurrentState = e.reset()
     currentState = anhXa(realCurrentState)
